@@ -150,9 +150,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 12,
   },
-  loaderText: {fontSize: 14, fontWeight: '600'},
+  loaderText: {fontSize: 14, fontWeight: '600', marginTop: 12},
 
   row: {
     flexDirection: 'row',
