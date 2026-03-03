@@ -2,11 +2,6 @@ import React, {useState} from 'react';
 import {View, Dimensions, StyleSheet, Text} from 'react-native';
 import {TabView, TabBar} from 'react-native-tab-view';
 
-// Rewritten to use react-native-tab-view directly.
-// @react-navigation/material-top-tabs requires missing peer deps
-// (@react-navigation/native, react-native-screens, react-native-safe-area-context)
-// that are not installed, so we use TabBar from react-native-tab-view instead.
-
 function TabOne() {
   return (
     <View style={styles.container}>
@@ -36,9 +31,11 @@ const renderScene = ({route}) => {
 const renderTabBar = props => (
   <TabBar
     {...props}
-    style={{backgroundColor: '#6200ee'}}
-    indicatorStyle={{backgroundColor: 'white'}}
-    labelStyle={{color: 'white', fontWeight: 'bold'}}
+    style={styles.tabBar}
+    indicatorStyle={styles.indicator}
+    labelStyle={styles.label}
+    pressColor="#ffffff40"   // instant ripple on Android
+    pressOpacity={0.6}       // instant feedback on iOS
   />
 );
 
@@ -57,6 +54,8 @@ export default function TabView2() {
       onIndexChange={setIndex}
       initialLayout={{width: layout.width}}
       renderTabBar={renderTabBar}
+      lazy={false}           // pre-render all tabs — no blank flash on switch
+      swipeEnabled={true}
     />
   );
 }
@@ -69,4 +68,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#ff4081',
   },
   text: {color: 'white', fontSize: 20, fontWeight: 'bold'},
+  tabBar: {
+    backgroundColor: '#6200ee',
+    elevation: 0,
+    shadowOpacity: 0,
+  },
+  indicator: {
+    backgroundColor: 'white',
+    height: 3,
+    borderRadius: 2,
+  },
+  label: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
 });

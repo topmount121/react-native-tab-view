@@ -2,24 +2,18 @@ import React, {useState} from 'react';
 import {View, Dimensions, StyleSheet, Text} from 'react-native';
 import {TabView, TabBar} from 'react-native-tab-view';
 
-// react-native-scrollable-tab-view needs @react-native-community/viewpager
-// (a native module not installed). Using react-native-tab-view with
-// scrollEnabled instead — pure JS, no native linking required.
-
-const COLORS = ['#ff4081', '#673ab7', '#2196F3'];
-
 const TabOne = () => (
-  <View style={[styles.tab, {backgroundColor: COLORS[0]}]}>
+  <View style={[styles.tab, {backgroundColor: '#ff4081'}]}>
     <Text style={styles.text}>Scrollable Tab 1</Text>
   </View>
 );
 const TabTwo = () => (
-  <View style={[styles.tab, {backgroundColor: COLORS[1]}]}>
+  <View style={[styles.tab, {backgroundColor: '#673ab7'}]}>
     <Text style={styles.text}>Scrollable Tab 2</Text>
   </View>
 );
 const TabThree = () => (
-  <View style={[styles.tab, {backgroundColor: COLORS[2]}]}>
+  <View style={[styles.tab, {backgroundColor: '#2196F3'}]}>
     <Text style={styles.text}>Scrollable Tab 3</Text>
   </View>
 );
@@ -36,11 +30,13 @@ const renderScene = ({route}) => {
 const renderTabBar = props => (
   <TabBar
     {...props}
-    scrollEnabled
-    style={{backgroundColor: '#37474f'}}
-    indicatorStyle={{backgroundColor: '#ff4081'}}
-    labelStyle={{color: 'white', fontWeight: 'bold'}}
-    tabStyle={{width: 120}}
+    scrollEnabled                        // tabs scroll horizontally
+    style={styles.tabBar}
+    indicatorStyle={styles.indicator}
+    labelStyle={styles.label}
+    tabStyle={styles.tabStyle}
+    pressColor="#ff408140"   // instant ripple on Android
+    pressOpacity={0.6}       // instant feedback on iOS
   />
 );
 
@@ -60,6 +56,8 @@ export default function TabView3() {
       onIndexChange={setIndex}
       initialLayout={{width: layout.width}}
       renderTabBar={renderTabBar}
+      lazy={false}           // pre-render all tabs — no blank flash on switch
+      swipeEnabled={true}
     />
   );
 }
@@ -67,4 +65,22 @@ export default function TabView3() {
 const styles = StyleSheet.create({
   tab: {flex: 1, justifyContent: 'center', alignItems: 'center'},
   text: {color: 'white', fontSize: 20, fontWeight: 'bold'},
+  tabBar: {
+    backgroundColor: '#37474f',
+    elevation: 0,
+    shadowOpacity: 0,
+  },
+  indicator: {
+    backgroundColor: '#ff4081',
+    height: 3,
+    borderRadius: 2,
+  },
+  label: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
+  tabStyle: {
+    width: 120,
+  },
 });
