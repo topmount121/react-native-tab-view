@@ -10,7 +10,6 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@react-navigation/material-top-tabs": "^7.4.16",
     "react": "17.0.1",
     "react-native": "0.64.4",
     "react-native-gesture-handler": "^1.10.3",

@@ -1,10 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @format
- * @flow strict-local
- */
-
 import React, {useState} from 'react';
 import {
   SafeAreaView,
@@ -17,8 +10,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-// Import your tabview demos
-// import TabView1 from './tabview1';
+import TabView1 from './tabview1';
 import TabView2 from './tabview2';
 import TabView3 from './tabview3';
 
@@ -30,100 +22,93 @@ const Colors = {
   white: '#fff',
 };
 
-const Section = ({children, title}) => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
-
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
-  const [currentPage, setCurrentPage] = useState('home'); // 'home', 'tab1', 'tab2', 'tab3'
+  const [currentPage, setCurrentPage] = useState('home');
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    flex: 1,
   };
 
-  const renderPage = () => {
+  // Tab views need flex:1 and must NOT be inside a ScrollView
+  const renderTabView = () => {
+    let TabComponent = null;
     switch (currentPage) {
       case 'tab1':
-        return <TabView2 style={styles.fullScreen} />;
+        TabComponent = TabView1;
+        break;
       case 'tab2':
-        return <TabView2 style={styles.fullScreen} />;
+        TabComponent = TabView2;
+        break;
       case 'tab3':
-        return <TabView3 style={styles.fullScreen} />;
-      default:
-        return renderHomePage();
+        TabComponent = TabView3;
+        break;
     }
+    return (
+      <View style={styles.fullScreen}>
+        <TabComponent />
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => setCurrentPage('home')}>
+          <Text style={styles.backButtonText}>← Back</Text>
+        </TouchableOpacity>
+      </View>
+    );
   };
 
   const renderHomePage = () => (
-    <>
+    <ScrollView
+      contentInsetAdjustmentBehavior="automatic"
+      style={backgroundStyle}>
       <View
         style={{
           backgroundColor: isDarkMode ? Colors.black : Colors.white,
         }}>
-        <Section title="TabView Demos">
-          Select a tab view library demo to try:
-        </Section>
-        
+        <View style={styles.sectionContainer}>
+          <Text
+            style={[
+              styles.sectionTitle,
+              {color: isDarkMode ? Colors.white : Colors.black},
+            ]}>
+            TabView Demos
+          </Text>
+          <Text
+            style={[
+              styles.sectionDescription,
+              {color: isDarkMode ? Colors.light : Colors.darker},
+            ]}>
+            Select a tab view library demo to try:
+          </Text>
+        </View>
+
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.demoButton, {backgroundColor: '#ff4081'}]}
             onPress={() => setCurrentPage('tab1')}>
             <Text style={styles.buttonText}>TabView 1 (react-native-tab-view)</Text>
           </TouchableOpacity>
-          
+
           <TouchableOpacity
             style={[styles.demoButton, {backgroundColor: '#673ab7'}]}
             onPress={() => setCurrentPage('tab2')}>
-            <Text style={styles.buttonText}>TabView 2 (Material Top Tabs)</Text>
+            <Text style={styles.buttonText}>TabView 2 (Material Style)</Text>
           </TouchableOpacity>
-          
+
           <TouchableOpacity
             style={[styles.demoButton, {backgroundColor: '#2196F3'}]}
             onPress={() => setCurrentPage('tab3')}>
             <Text style={styles.buttonText}>TabView 3 (Scrollable TabView)</Text>
           </TouchableOpacity>
-          
-          <TouchableOpacity
-            style={[styles.demoButton, {backgroundColor: 'gray'}]}
-            onPress={() => setCurrentPage('home')}>
-            <Text style={styles.buttonText}>← Back to Home</Text>
-          </TouchableOpacity>
         </View>
       </View>
-    </>
+    </ScrollView>
   );
 
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        {renderPage()}
-      </ScrollView>
+      {currentPage === 'home' ? renderHomePage() : renderTabView()}
     </SafeAreaView>
   );
 };
@@ -155,10 +140,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 12,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
     elevation: 5,
   },
   buttonText: {
@@ -166,8 +147,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  highlight: {
-    fontWeight: '700',
+  backButton: {
+    position: 'absolute',
+    bottom: 20,
+    left: 20,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+  },
+  backButtonText: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: 'bold',
   },
 });
 

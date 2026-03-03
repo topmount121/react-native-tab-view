@@ -1,8 +1,11 @@
-import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import React, {useState} from 'react';
+import {View, Dimensions, StyleSheet, Text} from 'react-native';
+import {TabView, TabBar} from 'react-native-tab-view';
 
-const Tab = createMaterialTopTabNavigator();
+// Rewritten to use react-native-tab-view directly.
+// @react-navigation/material-top-tabs requires missing peer deps
+// (@react-navigation/native, react-native-screens, react-native-safe-area-context)
+// that are not installed, so we use TabBar from react-native-tab-view instead.
 
 function TabOne() {
   return (
@@ -19,12 +22,42 @@ function TabTwo() {
   );
 }
 
+const renderScene = ({route}) => {
+  switch (route.key) {
+    case 'one':
+      return <TabOne />;
+    case 'two':
+      return <TabTwo />;
+    default:
+      return null;
+  }
+};
+
+const renderTabBar = props => (
+  <TabBar
+    {...props}
+    style={{backgroundColor: '#6200ee'}}
+    indicatorStyle={{backgroundColor: 'white'}}
+    labelStyle={{color: 'white', fontWeight: 'bold'}}
+  />
+);
+
 export default function TabView2() {
+  const [index, setIndex] = useState(0);
+  const [routes] = useState([
+    {key: 'one', title: 'One'},
+    {key: 'two', title: 'Two'},
+  ]);
+  const layout = Dimensions.get('window');
+
   return (
-    <Tab.Navigator>
-      <Tab.Screen name="One" component={TabOne} />
-      <Tab.Screen name="Two" component={TabTwo} />
-    </Tab.Navigator>
+    <TabView
+      navigationState={{index, routes}}
+      renderScene={renderScene}
+      onIndexChange={setIndex}
+      initialLayout={{width: layout.width}}
+      renderTabBar={renderTabBar}
+    />
   );
 }
 
