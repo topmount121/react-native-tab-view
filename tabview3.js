@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import {ScrollableTabView, DefaultTabBar} from 'react-native-scrollable-tab-view';
+import ScrollableTabView, {DefaultTabBar} from 'react-native-scrollable-tab-view';
 
 const TabOne = () => (
   <View style={[styles.tab, {backgroundColor: '#ff4081'}]}>
