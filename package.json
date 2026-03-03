@@ -14,7 +14,6 @@
     "react-native": "0.64.4",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-reanimated": "^1.13.2",
-    "react-native-scrollable-tab-view": "^1.0.0",
     "react-native-tab-view": "^2.16.0"
   },
   "devDependencies": {
